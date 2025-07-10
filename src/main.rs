@@ -14,7 +14,7 @@ use crate::game::Game;
 const BACKGROUND_COLOR: Color = [0.08, 0.10, 0.12, 1.0];
 
 fn main() {
-    let (width, height) = (20, 20);
+    let (width, height) = (27, 22);
 
     let mut window_settings = WindowSettings::new(
         "🐍 Rust Snake Game",
