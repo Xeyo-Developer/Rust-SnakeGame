@@ -1,0 +1,9 @@
+[package]
+name = "rust-snakegame"
+version = "1.0.0"
+edition = "2024"
+authors = ["Xeyo <wojciechfirmowe@wp.pl>"]
+
+[dependencies]
+piston_window = "0.132.0"
+rand = "0.9"
