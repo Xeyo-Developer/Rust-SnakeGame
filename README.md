@@ -2,6 +2,8 @@
 
 A classic Snake game written in Rust using the Piston Window library. The game offers smooth gameplay with animated visual effects and charming details.
 
+![Screenshot of the game](Rust-SnakeGame.png)
+
 ## ✨ Features
 
 - **Classic Snake mechanics** - move around the board, collect food and grow
