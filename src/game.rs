@@ -3,7 +3,7 @@ use piston_window::*;
 
 use rand::Rng;
 
-use crate::drawing::{BLOCK_SIZE, draw_rectangle, to_gui_coord};
+use crate::drawing::{draw_rectangle, to_gui_coord, BLOCK_SIZE};
 use crate::snake::{Direction, Snake};
 
 const BORDER_COLOR: Color = [0.35, 0.35, 0.35, 1.0];
@@ -12,7 +12,6 @@ const GAMEOVER_COLOR: Color = [0.91, 0.30, 0.24, 0.8];
 const SCORE_COLOR: Color = [1.0, 1.0, 1.0, 1.0];
 
 const MOVING_PERIOD: f64 = 0.2;
-const RESTART_TIME: f64 = 1.0;
 
 pub struct Game {
     snake: Snake,
@@ -48,6 +47,9 @@ impl Game {
 
     pub fn key_pressed(&mut self, key: Key) {
         if self.is_game_over {
+            if key == Key::Space {
+                self.restart();
+            }
             return;
         }
 
@@ -113,7 +115,6 @@ impl Game {
             );
         }
 
-        // Draw score
         let score_text = format!("Score: {}", self.score);
         let font_size = 20;
         text::Text::new_color(SCORE_COLOR, font_size)
@@ -129,10 +130,9 @@ impl Game {
         if self.is_game_over {
             draw_rectangle(GAMEOVER_COLOR, 0, 0, self.width, self.height, con, g);
 
-            // Draw game over text and final score
             let game_over_text = "GAME OVER";
             let final_score_text = format!("Final Score: {}", self.score);
-            let restart_text = "Press any key to restart";
+            let restart_text = "Press SPACE to restart";
 
             let center_x = to_gui_coord(self.width) / 2.0;
             let center_y = to_gui_coord(self.height) / 2.0;
@@ -175,9 +175,6 @@ impl Game {
         self.snake.update_tongue(delta_time);
 
         if self.is_game_over {
-            if self.waiting_time > RESTART_TIME {
-                self.restart();
-            }
             return;
         }
 
@@ -196,7 +193,7 @@ impl Game {
         if self.food_exists && self.food_x == head_x && self.food_y == head_y {
             self.food_exists = false;
             self.snake.restore_last_removed();
-            self.score += 10; // Increase score by 10 points for each food eaten
+            self.score += 10;
         }
     }
 

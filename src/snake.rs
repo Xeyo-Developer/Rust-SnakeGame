@@ -1,8 +1,8 @@
 use std::collections::LinkedList;
 
+use piston_window::types::Color;
 use piston_window::Context;
 use piston_window::G2d;
-use piston_window::types::Color;
 
 use rand::Rng;
 
@@ -175,6 +175,6 @@ impl Snake {
                 break;
             }
         }
-        return false;
+        false
     }
 }
