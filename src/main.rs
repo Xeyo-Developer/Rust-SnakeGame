@@ -20,7 +20,7 @@ fn main() {
         "🐍 Rust Snake Game",
         [to_gui_coord_u32(width), to_gui_coord_u32(height)],
     )
-    .exit_on_esc(true);
+        .exit_on_esc(true);
 
     window_settings.set_vsync(true);
 
@@ -28,14 +28,31 @@ fn main() {
 
     let mut game = Game::new(width, height);
 
+    // Load font at startup
+    let font_path = std::path::Path::new("assets/FiraSans-Regular.ttf");
+    let fallback_font = if cfg!(target_os = "windows") {
+        std::path::Path::new("C:\\Windows\\Fonts\\arial.ttf")
+    } else if cfg!(target_os = "macos") {
+        std::path::Path::new("/System/Library/Fonts/Arial.ttf")
+    } else {
+        std::path::Path::new("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
+    };
+
+    let mut glyphs = if font_path.exists() {
+        window.load_font(font_path).unwrap()
+    } else {
+        window.load_font(fallback_font).expect("Could not load any font")
+    };
+
     while let Some(event) = window.next() {
         if let Some(Button::Keyboard(key)) = event.press_args() {
             game.key_pressed(key);
         }
 
-        window.draw_2d(&event, |c, g, _| {
+        window.draw_2d(&event, |c, g, device| {
             clear(BACKGROUND_COLOR, g);
-            game.draw(&c, g);
+            game.draw(&c, g, &mut glyphs);
+            glyphs.factory.encoder.flush(device);
         });
 
         event.update(|arg| {

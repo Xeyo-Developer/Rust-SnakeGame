@@ -9,6 +9,7 @@ use crate::snake::{Direction, Snake};
 const BORDER_COLOR: Color = [0.35, 0.35, 0.35, 1.0];
 const FOOD_COLOR: Color = [0.96, 0.71, 0.20, 1.0];
 const GAMEOVER_COLOR: Color = [0.91, 0.30, 0.24, 0.8];
+const SCORE_COLOR: Color = [1.0, 1.0, 1.0, 1.0];
 
 const MOVING_PERIOD: f64 = 0.2;
 const RESTART_TIME: f64 = 1.0;
@@ -26,6 +27,7 @@ pub struct Game {
     is_game_over: bool,
     waiting_time: f64,
     food_timer: f64,
+    score: u32,
 }
 
 impl Game {
@@ -40,6 +42,7 @@ impl Game {
             height,
             is_game_over: false,
             food_timer: 0.0,
+            score: 0,
         }
     }
 
@@ -63,7 +66,7 @@ impl Game {
         self.update_snake(dir);
     }
 
-    pub fn draw(&self, con: &Context, g: &mut G2d) {
+    pub fn draw(&self, con: &Context, g: &mut G2d, glyphs: &mut Glyphs) {
         self.snake.draw(con, g);
 
         if self.food_exists {
@@ -110,8 +113,59 @@ impl Game {
             );
         }
 
+        // Draw score
+        let score_text = format!("Score: {}", self.score);
+        let font_size = 20;
+        text::Text::new_color(SCORE_COLOR, font_size)
+            .draw(
+                &score_text,
+                glyphs,
+                &con.draw_state,
+                con.transform.trans(10.0, 30.0),
+                g,
+            )
+            .unwrap();
+
         if self.is_game_over {
             draw_rectangle(GAMEOVER_COLOR, 0, 0, self.width, self.height, con, g);
+
+            // Draw game over text and final score
+            let game_over_text = "GAME OVER";
+            let final_score_text = format!("Final Score: {}", self.score);
+            let restart_text = "Press any key to restart";
+
+            let center_x = to_gui_coord(self.width) / 2.0;
+            let center_y = to_gui_coord(self.height) / 2.0;
+
+            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 32)
+                .draw(
+                    game_over_text,
+                    glyphs,
+                    &con.draw_state,
+                    con.transform.trans(center_x - 80.0, center_y - 40.0),
+                    g,
+                )
+                .unwrap();
+
+            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 24)
+                .draw(
+                    &final_score_text,
+                    glyphs,
+                    &con.draw_state,
+                    con.transform.trans(center_x - 70.0, center_y),
+                    g,
+                )
+                .unwrap();
+
+            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 16)
+                .draw(
+                    restart_text,
+                    glyphs,
+                    &con.draw_state,
+                    con.transform.trans(center_x - 80.0, center_y + 40.0),
+                    g,
+                )
+                .unwrap();
         }
     }
 
@@ -142,6 +196,7 @@ impl Game {
         if self.food_exists && self.food_x == head_x && self.food_y == head_y {
             self.food_exists = false;
             self.snake.restore_last_removed();
+            self.score += 10; // Increase score by 10 points for each food eaten
         }
     }
 
@@ -188,5 +243,6 @@ impl Game {
         self.food_x = 5;
         self.food_y = 3;
         self.is_game_over = false;
+        self.score = 0;
     }
 }
