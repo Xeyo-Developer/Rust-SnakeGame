@@ -5,21 +5,28 @@ A classic Snake game written in Rust using the Piston Window library. The game o
 ![Screenshot of the game](Rust-SnakeGame.png)
 
 ## ✨ Features
+- **Core Gameplay**
+  - Classic snake mechanics with growth system
+  - Collision detection (walls and self)
+  - Score tracking
 
-- **Classic Snake mechanics** - move around the board, collect food and grow
-- **Animated visual effects**:
-  - Pulsating food with glowing effect
-  - Animated snake tongue (extends randomly)
-  - Snake eyes pointing in the direction of movement
-  - Multi-layered board border
-- **Automatic restart** after game over
-- **Smooth controls** with arrow keys
-- **Responsive interface** with VSync enabled
+- **Visual Enhancements**
+  - Directional snake eyes 👀
+  - Animated flickering tongue 👅
+  - Pulsating food effect 💫
+  - Multi-layered borders
+
+- **Technical Features**
+  - VSync-enabled smooth rendering
+  - Responsive controls
+  - Automatic game restart
 
 ## 🎮 Controls
-
-- **Arrow Keys** - control the snake
-- **ESC** - exit the game
+| Key        | Action               |
+|------------|----------------------|
+| Arrow Keys | Change snake direction |
+| Space      | Restart game         |
+| ESC        | Exit game            |
 
 ## 🛠️ Requirements
 
