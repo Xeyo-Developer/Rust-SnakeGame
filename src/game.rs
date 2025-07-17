@@ -138,7 +138,15 @@ impl Game {
             let mut shield_color = SHIELD_EFFECT_COLOR;
             shield_color[3] = pulse as f32 * 0.3;
 
-            draw_rectangle(shield_color, 1, 1, self.width - 2, self.height - 2, &shake_con, g);
+            draw_rectangle(
+                shield_color,
+                1,
+                1,
+                self.width - 2,
+                self.height - 2,
+                &shake_con,
+                g,
+            );
         }
 
         self.snake.draw(&shake_con, g);
@@ -270,7 +278,7 @@ impl Game {
                 1.0,
                 1.0 - (self.combo_count as f32 * 0.1).min(0.5),
                 0.0,
-                1.0
+                1.0,
             ];
             text::Text::new_color(combo_color, 16)
                 .draw(
@@ -415,8 +423,9 @@ impl Game {
         let mut new_x = rng.random_range(1..(self.width - 1));
         let mut new_y = rng.random_range(1..(self.height - 1));
 
-        while self.snake.is_overlap_except_tail(new_x, new_y) ||
-            (self.food_exists && new_x == self.food_x && new_y == self.food_y) {
+        while self.snake.is_overlap_except_tail(new_x, new_y)
+            || (self.food_exists && new_x == self.food_x && new_y == self.food_y)
+        {
             new_x = rng.random_range(1..(self.width - 1));
             new_y = rng.random_range(1..(self.height - 1));
         }
@@ -491,7 +500,8 @@ impl Game {
             return self.is_shielded;
         }
 
-        let wall_collision = next_x <= 0 || next_y <= 0 || next_x >= self.width - 1 || next_y >= self.height - 1;
+        let wall_collision =
+            next_x <= 0 || next_y <= 0 || next_x >= self.width - 1 || next_y >= self.height - 1;
 
         if wall_collision {
             return self.is_shielded;
@@ -506,8 +516,9 @@ impl Game {
         let mut new_x = rng.random_range(1..(self.width - 1));
         let mut new_y = rng.random_range(1..(self.height - 1));
 
-        while self.snake.is_overlap_except_tail(new_x, new_y) ||
-            self.powerups.iter().any(|p| p.x == new_x && p.y == new_y) {
+        while self.snake.is_overlap_except_tail(new_x, new_y)
+            || self.powerups.iter().any(|p| p.x == new_x && p.y == new_y)
+        {
             new_x = rng.random_range(1..(self.width - 1));
             new_y = rng.random_range(1..(self.height - 1));
         }

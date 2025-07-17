@@ -1552,7 +1552,7 @@ checksum = "a457e416a0f90d246a4c3288bd7a25b2304ca727f253f95be383dd17af56be8f"
 
 [[package]]
 name = "rust-snakegame"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "piston_window",
  "rand 0.9.1",

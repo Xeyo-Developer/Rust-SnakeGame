@@ -1,7 +1,7 @@
 [package]
 name = "rust-snakegame"
 authors = ["Xeyo <wojciechfirmowe@wp.pl>"]
-version = "1.0.1"
+version = "1.0.2"
 
 [dependencies]
 piston_window = "0.132.0"
