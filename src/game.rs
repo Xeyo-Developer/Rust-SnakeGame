@@ -284,63 +284,64 @@ impl Game {
         }
 
         if self.is_game_over {
-            draw_rectangle([0.0, 0.0, 0.0, 0.7], 0, 0, self.width, self.height, con, g);
+            draw_rectangle(GAMEOVER_COLOR, 0, 0, self.width, self.height, &shake_con, g);
 
             let center_x = to_gui_coord(self.width) / 2.0;
             let center_y = to_gui_coord(self.height) / 2.0;
 
-            let text_offset = if self.game_over_animation < 1.0 {
-                50.0 * (1.0 - self.game_over_animation)
-            } else {
-                0.0
-            };
-
-            let title_color = [0.91, 0.30, 0.24, 1.0];
-            text::Text::new_color(title_color, 40)
+            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 36)
                 .draw(
                     "GAME OVER",
                     glyphs,
                     &con.draw_state,
-                    con.transform.trans(center_x - 100.0, center_y - 50.0 + text_offset),
+                    shake_transform.trans(center_x - 90.0, center_y - 40.0),
                     g,
                 )
                 .unwrap();
 
-            let stats_y = center_y - 10.0 + text_offset;
-            let final_score_text = format!("Score: {}", self.score);
-            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 30)
+            let score_text = format!("Score: {}", self.score);
+            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 28)
                 .draw(
-                    &final_score_text,
+                    &score_text,
                     glyphs,
                     &con.draw_state,
-                    con.transform.trans(center_x - 70.0, stats_y),
+                    shake_transform.trans(center_x - 60.0, center_y),
                     g,
                 )
                 .unwrap();
 
-            if self.high_score > 0 && self.score == self.high_score {
-                let new_record_text = "NEW HIGH SCORE!";
-                let pulse = 0.7 + 0.3 * (self.game_over_animation * 6.0).sin().abs();
-                let record_color = [1.0, 0.8, 0.0, pulse as f32];
-                text::Text::new_color(record_color, 20)
+            if self.high_score > 0 {
+                let high_score_text = format!("High Score: {}", self.high_score);
+                text::Text::new_color([1.0, 1.0, 1.0, 1.0], 24)
                     .draw(
-                        new_record_text,
+                        &high_score_text,
                         glyphs,
                         &con.draw_state,
-                        con.transform.trans(center_x - 90.0, stats_y + 40.0),
+                        shake_transform.trans(center_x - 80.0, center_y + 40.0),
                         g,
                     )
                     .unwrap();
+
+                if self.score == self.high_score {
+                    text::Text::new_color([1.0, 0.84, 0.0, 1.0], 20)
+                        .draw(
+                            "NEW RECORD!",
+                            glyphs,
+                            &con.draw_state,
+                            shake_transform.trans(center_x - 60.0, center_y + 70.0),
+                            g,
+                        )
+                        .unwrap();
+                }
             }
 
-            let blink = (self.game_over_animation * 3.0).sin().abs();
-            let instruction_color = [1.0, 1.0, 1.0, blink as f32];
-            text::Text::new_color(instruction_color, 20)
+            let blink = (self.game_over_animation * 2.0).sin().abs() as f32;
+            text::Text::new_color([1.0, 1.0, 1.0, blink], 20)
                 .draw(
                     "Press SPACE to restart",
                     glyphs,
                     &con.draw_state,
-                    con.transform.trans(center_x - 100.0, center_y + 50.0 + text_offset),
+                    shake_transform.trans(center_x - 100.0, center_y + 100.0),
                     g,
                 )
                 .unwrap();
