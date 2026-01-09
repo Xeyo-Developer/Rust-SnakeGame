@@ -1,5 +1,5 @@
-use piston_window::types::Color;
-use piston_window::*;
+use graphics::types::Color;
+use graphics::{ellipse, rectangle, Context, Graphics};
 
 use crate::snake::Direction;
 
@@ -13,7 +13,7 @@ pub fn to_gui_coord_u32(game_coord: i32) -> u32 {
     to_gui_coord(game_coord) as u32
 }
 
-pub fn draw_block(color: Color, x: i32, y: i32, con: &Context, g: &mut G2d) {
+pub fn draw_block<G: Graphics>(color: Color, x: i32, y: i32, con: &Context, g: &mut G) {
     let gui_x = to_gui_coord(x);
     let gui_y = to_gui_coord(y);
 
@@ -32,14 +32,14 @@ pub fn draw_block(color: Color, x: i32, y: i32, con: &Context, g: &mut G2d) {
     );
 }
 
-pub fn draw_rectangle(
+pub fn draw_rectangle<G: Graphics>(
     color: Color,
     start_x: i32,
     start_y: i32,
     width: i32,
     height: i32,
     con: &Context,
-    g: &mut G2d,
+    g: &mut G,
 ) {
     let gui_start_x = to_gui_coord(start_x);
     let gui_start_y = to_gui_coord(start_y);
@@ -57,7 +57,7 @@ pub fn draw_rectangle(
     );
 }
 
-pub fn draw_eyes(direction: Direction, x: i32, y: i32, con: &Context, g: &mut G2d) {
+pub fn draw_eyes<G: Graphics>(direction: Direction, x: i32, y: i32, con: &Context, g: &mut G) {
     let gui_x = to_gui_coord(x);
     let gui_y = to_gui_coord(y);
     let eye_color = [1.0, 1.0, 1.0, 1.0];
@@ -97,7 +97,7 @@ pub fn draw_eyes(direction: Direction, x: i32, y: i32, con: &Context, g: &mut G2
     }
 }
 
-pub fn draw_tongue(direction: Direction, x: i32, y: i32, con: &Context, g: &mut G2d) {
+pub fn draw_tongue<G: Graphics>(direction: Direction, x: i32, y: i32, con: &Context, g: &mut G) {
     let gui_x = to_gui_coord(x);
     let gui_y = to_gui_coord(y);
     let tongue_color = [0.86, 0.22, 0.27, 1.0];

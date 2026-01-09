@@ -99,7 +99,7 @@ The project consists of five main modules:
 
 ```toml
 [dependencies]
-piston_window = "0.132.0"
+piston_window = "0.146.0"
 rand = "0.9"
 ```
 

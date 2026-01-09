@@ -1,8 +1,7 @@
 use std::collections::LinkedList;
 
-use piston_window::types::Color;
-use piston_window::Context;
-use piston_window::G2d;
+use graphics::types::Color;
+use graphics::{Context, Graphics};
 
 use rand::Rng;
 
@@ -69,7 +68,7 @@ impl Snake {
         }
     }
 
-    pub fn draw(&self, con: &Context, g: &mut G2d) {
+    pub fn draw<G: Graphics>(&self, con: &Context, g: &mut G) {
         let mut is_head = true;
         for block in &self.body {
             if is_head {
