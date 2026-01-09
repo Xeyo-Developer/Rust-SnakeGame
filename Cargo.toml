@@ -4,5 +4,5 @@ authors = ["Xeyo <wojciechfirmowe@wp.pl>"]
 version = "1.0.2"
 
 [dependencies]
-piston_window = "0.132.0"
+piston_window = "0.146.0"
 rand = "0.9"

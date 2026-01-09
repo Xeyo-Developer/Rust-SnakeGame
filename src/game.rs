@@ -1,4 +1,5 @@
-use piston_window::types::Color;
+use graphics::types::Color;
+use graphics::{rectangle, CharacterCache, Context, Graphics, Text, Transformed};
 use piston_window::*;
 
 use rand::Rng;
@@ -116,7 +117,10 @@ impl Game {
         self.update_snake(dir);
     }
 
-    pub fn draw(&self, con: &Context, g: &mut G2d, glyphs: &mut Glyphs) {
+    pub fn draw<'a, G>(&self, con: &Context, g: &mut G, glyphs: &mut Glyphs<'a>)
+    where
+        G: Graphics<Texture = <Glyphs<'a> as CharacterCache>::Texture>,
+    {
         let shake_x = if self.screen_shake_timer > 0.0 {
             let mut rng = rand::rng();
             rng.random_range(-self.screen_shake_intensity..self.screen_shake_intensity)
@@ -220,7 +224,7 @@ impl Game {
 
         let score_text = format!("Score: {}", self.score);
         let font_size = 20;
-        text::Text::new_color(SCORE_COLOR, font_size)
+        Text::new_color(SCORE_COLOR, font_size)
             .draw(
                 &score_text,
                 glyphs,
@@ -232,7 +236,7 @@ impl Game {
 
         if self.high_score > 0 {
             let high_score_text = format!("Best: {}", self.high_score);
-            text::Text::new_color([0.8, 0.8, 0.8, 1.0], 16)
+            Text::new_color([0.8, 0.8, 0.8, 1.0], 16)
                 .draw(
                     &high_score_text,
                     glyphs,
@@ -246,7 +250,7 @@ impl Game {
         let mut status_y = 80.0;
         if self.is_speed_boosted {
             let speed_text = format!("SPEED BOOST: {:.1}s", self.speed_boost_timer);
-            text::Text::new_color(SPEED_POWERUP_COLOR, 14)
+            Text::new_color(SPEED_POWERUP_COLOR, 14)
                 .draw(
                     &speed_text,
                     glyphs,
@@ -260,7 +264,7 @@ impl Game {
 
         if self.is_shielded {
             let shield_text = format!("SHIELD: {:.1}s", self.shield_timer);
-            text::Text::new_color(SHIELD_POWERUP_COLOR, 14)
+            Text::new_color(SHIELD_POWERUP_COLOR, 14)
                 .draw(
                     &shield_text,
                     glyphs,
@@ -280,7 +284,7 @@ impl Game {
                 0.0,
                 1.0,
             ];
-            text::Text::new_color(combo_color, 16)
+            Text::new_color(combo_color, 16)
                 .draw(
                     &combo_text,
                     glyphs,
@@ -297,7 +301,7 @@ impl Game {
             let center_x = to_gui_coord(self.width) / 2.0;
             let center_y = to_gui_coord(self.height) / 2.0;
 
-            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 36)
+            Text::new_color([1.0, 1.0, 1.0, 1.0], 36)
                 .draw(
                     "GAME OVER",
                     glyphs,
@@ -308,7 +312,7 @@ impl Game {
                 .unwrap();
 
             let score_text = format!("Score: {}", self.score);
-            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 28)
+            Text::new_color([1.0, 1.0, 1.0, 1.0], 28)
                 .draw(
                     &score_text,
                     glyphs,
@@ -320,7 +324,7 @@ impl Game {
 
             if self.high_score > 0 {
                 let high_score_text = format!("High Score: {}", self.high_score);
-                text::Text::new_color([1.0, 1.0, 1.0, 1.0], 24)
+                Text::new_color([1.0, 1.0, 1.0, 1.0], 24)
                     .draw(
                         &high_score_text,
                         glyphs,
@@ -331,7 +335,7 @@ impl Game {
                     .unwrap();
 
                 if self.score == self.high_score {
-                    text::Text::new_color([1.0, 0.84, 0.0, 1.0], 20)
+                    Text::new_color([1.0, 0.84, 0.0, 1.0], 20)
                         .draw(
                             "NEW RECORD!",
                             glyphs,
@@ -344,7 +348,7 @@ impl Game {
             }
 
             let blink = (self.game_over_animation * 2.0).sin().abs() as f32;
-            text::Text::new_color([1.0, 1.0, 1.0, blink], 20)
+            Text::new_color([1.0, 1.0, 1.0, blink], 20)
                 .draw(
                     "Press SPACE to restart",
                     glyphs,

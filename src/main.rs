@@ -5,8 +5,10 @@ mod drawing;
 mod game;
 mod snake;
 
-use piston_window::types::Color;
+use graphics::clear;
+use graphics::types::Color;
 use piston_window::*;
+use wgpu_graphics::TextureSettings;
 
 use crate::drawing::to_gui_coord_u32;
 use crate::game::Game;
@@ -38,10 +40,10 @@ fn main() {
     };
 
     let mut glyphs = if font_path.exists() {
-        window.load_font(font_path).unwrap()
+        window.load_font(font_path, TextureSettings::new()).unwrap()
     } else {
         window
-            .load_font(fallback_font)
+            .load_font(fallback_font, TextureSettings::new())
             .expect("Could not load any font")
     };
 
@@ -50,10 +52,9 @@ fn main() {
             game.key_pressed(key);
         }
 
-        window.draw_2d(&event, |c, g, device| {
+        window.draw_2d(&event, |c, g, _device| {
             clear(BACKGROUND_COLOR, g);
             game.draw(&c, g, &mut glyphs);
-            glyphs.factory.encoder.flush(device);
         });
 
         event.update(|arg| {
